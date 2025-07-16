@@ -226,7 +226,7 @@ def merge_yolo_labels(folder_a, folder_b, output_folder, classes_a, classes_b, f
             total=len(all_txt_files),
             desc="Merging YOLO labels"
         ))
-#########################################################################
+#####################################################################################
 
 def process_label_file(args):
     """处理单个标注文件，将A的标注写入B"""
@@ -273,7 +273,7 @@ def process_label_file(args):
     
     return f"更新 {b_label_path}，追加 {len(converted_lines)} 条标注"
 
-def merge_yolo_labels(dataset_a_path, dataset_b_path, a_classes, b_classes, max_workers=4):
+def merge_yolo_labelsA_to_B(dataset_a_path, dataset_b_path, a_classes, b_classes, max_workers=4):
     """将A标注集的标注写入B标注集"""
     # 类名到ID的映射
     a_class_to_id = {name: idx for idx, name in enumerate(a_classes)}
@@ -290,8 +290,8 @@ def merge_yolo_labels(dataset_a_path, dataset_b_path, a_classes, b_classes, max_
         return
     
     # 定义目录
-    a_label_dir = Path(dataset_a_path) / "labels"
-    b_label_dir = Path(dataset_b_path) / "labels"
+    a_label_dir = Path(dataset_a_path) #/ "labels"
+    b_label_dir = Path(dataset_b_path) #/ "labels"
     subdirs = ["train", "test", "val"]
     
     for subdir in subdirs:
@@ -384,7 +384,7 @@ def filter_yolo_dataset(dataset_path, max_workers=4):
 ##############################################################################
 # Example usage
 if __name__ == '__main__':
-
+########################################从大类挑选出小类并修改ID################################################
     # # ✅ 修改这些参数为你自己的路径和类别
     # images_dir = 'E:/my_yolo/my_yolo//val2017/val2017'  # 原始图片路径（可以是images/train 或 images/）
     # labels_dir = 'E:/my_yolo/my_yolo/coco_dog_cat/labels'  # 标签路径
@@ -392,7 +392,6 @@ if __name__ == '__main__':
     # desired_class_names = ['dog', 'cat']  # 想要保留的类别
     # output_dir = 'E:/my_yolo/my_yolo/coco_dog_cat'  # 输出目录
     # max_workers = 2  # 并行线程数
-
     # 复制出指定类的图像和标签目录结构
     # filter_dataset(
     #     images_dir=images_dir,
@@ -408,7 +407,7 @@ if __name__ == '__main__':
     #     original_yaml_path=yaml_path,
     #     new_class_names=['stop','ok','one','three','four','face','like','dislike','call','hand_heart','person','cat','dog']
     # )
-
+##########################################合成新的labels#######################################################
     # 修改1: 定义基础路径
 #     base_folder_a = "E:/my_yolo/my_yolo/new_yolo/8_labels"  # 第一个标签文件夹基础路径
 #     base_folder_b = "E:/my_yolo/my_yolo/new_yolo/face_labels"  # 第二个标签文件夹基础路径
@@ -418,7 +417,7 @@ if __name__ == '__main__':
 #  "little_finger", "middle_finger", "take_picture", "dislike", "first", "four", "like", "mute", "ok", "one",
 # "palm", "peace", "peace_inverted", "rock", "stop", "stop_inverted", "three", "three2", "two_up", "two_up_inverted",
 # "three_gun", "thumb_index", "thumb_index2", "no_gesture"]
-#     classes_b = ['person']
+#     classes_b = ['face']
 #     final_classes = ['stop','ok','one','three','four','face','like','dislike','call','hand_heart','person','cat','dog']
     
 #     # 修改2: 修复循环语法，从 range(['train','test','val']) 改为直接迭代列表
@@ -437,16 +436,16 @@ if __name__ == '__main__':
     
 #     # 修改5: 移动最终完成消息到循环外部，显示整体完成状态
 #     print(f"所有分割的标签合并完成，输出到: {base_output_folder}")
-
+# ###############################增加新的类#################################################
     # 数据集路径和类名（可替换为任意类名列表）A写入到B
     dataset_a_path = "E:/my_yolo/my_yolo/new_yolo/person_labels"  # 替换为A数据集路径
     dataset_b_path = "E:/my_yolo/my_yolo/new_yolo/labels"  # 替换为B数据集路径
     a_classes = ['person']  # 替换为你的A类名列表
     b_classes = ['stop','ok','one','three','four','face','like','dislike','call','hand_heart','person','cat','dog']  # 替换为你的B类名列表
-    
-    merge_yolo_labels(dataset_a_path, dataset_b_path, a_classes, b_classes, max_workers=4)
-    print("合并完成！")
 
+    merge_yolo_labelsA_to_B(dataset_a_path, dataset_b_path, a_classes, b_classes, max_workers=4)
+    print("合并完成！")
+####################################基于标签，删除多余的图片###################################################
     # # 数据集根目录
     # dataset_path = "E:/my_yolo/my_yolo/new_yolo"  # 请替换为你的数据集路径
     # filter_yolo_dataset(dataset_path, max_workers=4)
